@@ -41,6 +41,8 @@ public class StopRequestHandler implements HttpHandler {
         path = path.replace("%20", " ");
 
         String apiKey = "";
+        String busStopName = "";
+        String searchTag = "";
 
         String[] stationsParameters =  path.split("&");
         for(String parameter : stationsParameters){
@@ -48,12 +50,41 @@ public class StopRequestHandler implements HttpHandler {
             String stationName = parameter.split("=")[1];
 
             if(stationType.equalsIgnoreCase("key")) apiKey = stationName;
+            if(stationType.equalsIgnoreCase("search")) searchTag = stationName;
+            if(stationType.equalsIgnoreCase("name")) busStopName = stationName;
         }
-
 
         if(!KeyManager.isValid(apiKey)){
             SystemMessage.sendError("Unauthorized access to API -> Access denied");
             return "{\"errorMessage\":\"Invalid API-KEY\"}";
+        }
+
+        if(!searchTag.isEmpty()){
+            String[] searchParameter = searchTag.split("-");
+            //WENN ZWEI PARAMETER
+            if(searchParameter.length == 2){
+                //FALLS MENGE = MULTI
+                if(searchParameter[0].equalsIgnoreCase("MULTI")){
+                    //WENN NAME GEGEBEN
+                    if(!busStopName.isEmpty()) return new Gson().toJson(getMatchingStops(busStopName, searchParameter[1]));
+                    //WENN KEIN NAME GEGEBEN
+                    return "{\"errorMessage\":\"BusStop required!\"}";
+                //FALLS MENGE != MULTI --> SINGLE
+                }else{
+                    //FALLS NAME GEGEBEN
+                    if(!busStopName.isEmpty()) return new Gson().toJson(getMatchingBusStop(busStopName, searchParameter[1]));
+                    //WENN NICHT GEGEBEN
+                    return "{\"errorMessage\":\"BusStop required!\"}";
+                }
+            //WENN EIN ODER MEHR PARAMETER --> EIN PARAMETER
+            }else {
+                //FALLS NAME GEGEBEN
+                if(!busStopName.isEmpty()) return new Gson().toJson(getMatchingBusStop(busStopName, searchParameter[0]));
+                //WENN NICHT GEGEBEN
+                return "{\"errorMessage\":\"BusStop required!\"}";
+            }
+        }else if(!busStopName.isEmpty()){
+            return new Gson().toJson(getMatchingStops(busStopName, "ALL"));
         }
 
         return new Gson().toJson(getAllStops());
@@ -67,5 +98,58 @@ public class StopRequestHandler implements HttpHandler {
         });
 
         return jAbleBusStops;
+    }
+
+    public ArrayList<JAbleBusStop> getMatchingStops(String name, String tag){
+        ArrayList<JAbleBusStop> jAbleBusStops = new ArrayList<>();
+        String tagType = tag;
+        if(tagType == null) tagType = "ALL";
+        tagType = tagType.toUpperCase();
+
+        final String searchTag = tagType;
+
+        BusNetwork.stops.forEach((s, busStop) -> {
+            if(busStop.getName().toLowerCase().startsWith(name.toLowerCase())){
+                switch (searchTag){
+                    case "ATTRACTIONS":
+                        if(busStop.isAttraction()) jAbleBusStops.add(new JAbleBusStop(busStop));
+                        break;
+                    case "ALL":
+                    default:
+                        jAbleBusStops.add(new JAbleBusStop(busStop));
+                        break;
+
+                }
+            }
+        });
+
+        return jAbleBusStops;
+    }
+
+    public JAbleBusStop getMatchingBusStop(String name, String tag){
+
+        String tagType = tag;
+        if(tagType == null) tagType = "ALL";
+        tagType = tagType.toUpperCase();
+        final String searchTag = tagType;
+
+        ArrayList<JAbleBusStop> busStops = new ArrayList<>();
+
+        BusNetwork.stops.forEach((s, busStop) -> {
+            if(busStop.getName().toLowerCase().equals(name.toLowerCase())){
+                switch (searchTag){
+                    case "ATTRACTIONS":
+                        if(busStop.isAttraction()) busStops.add(new JAbleBusStop(busStop));
+                        break;
+                    case "ALL":
+                    default:
+                        busStops.add(new JAbleBusStop(busStop));
+                        break;
+
+                }
+            }
+        });
+        if(busStops.size() > 0) return  busStops.get(0);
+        return null;
     }
 }

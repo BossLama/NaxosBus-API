@@ -37,11 +37,6 @@ public class BootLoader {
         InputHandler.registerCommand(new LogCommand(), "log");
 
 
-        ArrayList<RouteConnection> connections = BusNetwork.getBusStop("Naxos Town / Port").findShortestPath(BusNetwork.getBusStop("Naxos Camping"));
-
-        for(RouteConnection connection : connections){
-            System.out.println(connection.getLineID() + " for " + connection.getDistance() + "min. --> " + connection.getBusStop().getName());
-        }
 
     }
 
