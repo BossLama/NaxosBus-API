@@ -32,11 +32,24 @@ http://localhost:8321/api/routes?key=YOUR_KEY&depature=DEPATURE_NAME&destination
 ``` 
 
 ### Bushaltestellen abfragen:
+#### Alle Bushaltestellen:
 ``` javascript
 http://localhost:8321/api/stops?key=YOUR_KEY
 ```
+#### Eine Bushaltestelle
+``` javascript
+http://localhost:8321/api/stops?key=YOUR_KEY&name=BUSSTOPNAME&search=SINGLE-SEARCH-VALUE
+```
 
-## Geplante Funktionen:
+#### Passende Bushaltestellen
+``` javascript
+http://localhost:8321/api/stops?key=YOUR_KEY&name=BUSSTOPNAME&search=MULTI-SEARCH-VALUE
+```
 
-- GET-REQUEST für einzelne Bushaltestellen
-- GET-REQUEST für Sehenswürdigkeiten
+#### SEARCH-VALUES
+Search Values bestehen aus zwei Parametern. Single/Multi - Attribut
+Beispiel: MULTI-ALL  --> Gibt alle Bushaltestellen mit dem passenden Namen zurück
+Beispiel: SINGLE-ATTRACTIONS  --> Gibt nur eine Attraktion mit passenden Namen zurück
+Alle Values:
+- [SINGLE | MULTI]-[ATTRACTIONS | ALL]
+
