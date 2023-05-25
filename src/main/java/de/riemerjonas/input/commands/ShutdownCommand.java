@@ -29,6 +29,11 @@ public class ShutdownCommand extends Command{
                 }
             }
         }.start();
+    }
 
+
+    @Override
+    public String getDescription() {
+        return "Shuts down the program";
     }
 }

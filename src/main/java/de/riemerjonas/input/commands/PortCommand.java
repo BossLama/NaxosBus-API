@@ -8,4 +8,9 @@ public class PortCommand extends Command{
     public void execute(String[] args) {
         SystemMessage.sendCommandInfo("API-Server is running on port " + BootLoader.PORT);
     }
+
+    @Override
+    public String getDescription() {
+        return "Return current port of server";
+    }
 }

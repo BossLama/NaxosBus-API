@@ -7,4 +7,9 @@ public class ClearCommand extends Command{
             System.out.println("");
         }
     }
+
+    @Override
+    public String getDescription() {
+        return "Clears console";
+    }
 }

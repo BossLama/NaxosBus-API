@@ -35,7 +35,7 @@ public class BootLoader {
         InputHandler.registerCommand(new ApiKeyCommand(), "apiKey");
         InputHandler.registerCommand(new ClearCommand(), "clear");
         InputHandler.registerCommand(new LogCommand(), "log");
-
+        InputHandler.registerCommand(new HelpCommand(), "help");
 
 
     }

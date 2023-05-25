@@ -17,4 +17,9 @@ public class LogCommand extends Command{
         System.out.println("[===================================== === ==== =====================================]");
         System.out.println();
     }
+
+    @Override
+    public String getDescription() {
+        return "Shows logbook of route-requests";
+    }
 }

@@ -35,4 +35,8 @@ public class InputHandler {
             }else SystemMessage.sendWarning("Unknown command " + cmd);
         }
     }
+
+    public static HashMap<String, Command> getCommands(){
+        return commands;
+    }
 }

@@ -14,6 +14,11 @@ public class StatusCommand extends Command{
         }else {
             SystemMessage.sendCommandInfo("Server is running!");
         }
+    }
 
+
+    @Override
+    public String getDescription() {
+        return "Returns current server state";
     }
 }

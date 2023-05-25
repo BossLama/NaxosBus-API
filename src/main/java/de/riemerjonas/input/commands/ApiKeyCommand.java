@@ -42,4 +42,10 @@ public class ApiKeyCommand extends Command{
 
         }else SystemMessage.sendCommandInfo("Use " + args[0] + " [create|delete|get]");
     }
+
+
+    @Override
+    public String getDescription() {
+        return "Creates / Returns api keys";
+    }
 }

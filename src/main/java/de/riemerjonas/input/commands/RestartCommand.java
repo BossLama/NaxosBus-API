@@ -26,4 +26,9 @@ public class RestartCommand extends Command{
             }
         }.start();
     }
+
+    @Override
+    public String getDescription() {
+        return "Restarts api-server";
+    }
 }
